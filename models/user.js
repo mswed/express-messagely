@@ -78,7 +78,7 @@ class User {
 
     static async all() {
         const results = await db.query(`SELECT username, first_name, last_name, phone
-                                        FROM users`)
+                                        FROM users ORDER BY username`)
 
         if (results.rows.length === 0) {
             throw new ExpressError('No users found', 404)
@@ -140,10 +140,11 @@ class User {
         return results.rows.map((m) => {
             return {
                 id: m.id,
-                to_user: {username: m.username, first_name: m.first_name, last_name: m.last_name, phone: m.phone},
                 body: m.body,
                 sent_at: m.sent_at,
-                read_at: m.read_at
+                read_at: m.read_at,
+                to_user: {username: m.username, first_name: m.first_name, last_name: m.last_name, phone: m.phone},
+
             }
         })
     }
@@ -177,10 +178,11 @@ class User {
         return results.rows.map((m) => {
             return {
                 id: m.id,
-                from_user: {username: m.username, first_name: m.first_name, last_name: m.last_name, phone: m.phone},
                 body: m.body,
                 sent_at: m.sent_at,
-                read_at: m.read_at
+                read_at: m.read_at,
+                from_user: {username: m.username, first_name: m.first_name, last_name: m.last_name, phone: m.phone},
+
             }
         })
     }
