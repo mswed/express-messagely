@@ -19,10 +19,10 @@ router.post('/login', async (req, res, next) => {
         if (!username || !password) {
             throw new ExpressError('Please provide user name and password', 400)
         }
-
+        console.log('USER NAME IS')
         if (await User.authenticate(username, password)) {
             await User.updateLoginTimestamp(username)
-            const token = jwt.sign(username, SECRET_KEY)
+            const token = jwt.sign({username}, SECRET_KEY)
             return res.json({token})
         } else {
             return next(new ExpressError('Wrong password or user name', 400))
@@ -52,7 +52,7 @@ router.post('/register', async (req, res, next) => {
         const newUser = await User.register({username, password, first_name, last_name, phone});
         if (newUser) {
             await User.updateLoginTimestamp(username)
-            const token = jwt.sign(username, SECRET_KEY)
+            const token = jwt.sign({username}, SECRET_KEY)
             return res.json({token})
 
         }

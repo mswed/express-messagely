@@ -1,5 +1,6 @@
 const express = require('express');
 const ExpressError = require('../expressError');
+const {ensureCorrectUser} = require('../middleware/auth')
 const User = require('../models/user');
 
 const router = new express.Router();
@@ -29,8 +30,9 @@ router.get('/', async (req, res, next) => {
  *
  **/
 
-router.get('/:username', async (req, res, next) => {
+router.get('/:username', ensureCorrectUser, async (req, res, next) => {
     try {
+        console.log('LOGGED IN USER', req.user)
         const user = await User.get(req.params.username);
         res.json({user})
     } catch (e) {

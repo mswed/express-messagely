@@ -21,7 +21,7 @@ const router = new express.Router();
 router.get('/:id', ensureLoggedIn , async (req, res, next) => {
     try {
         const message = await Message.get(req.params.id)
-        if ([message.from_user.username, message.to_user.username].includes(req.user.user)) {
+        if ([message.from_user.username, message.to_user.username].includes(req.user.username)) {
             return res.json({message})
         } else {
             throw new ExpressError('You are not allowed to view this message', 401)
@@ -48,7 +48,7 @@ router.post('/', async (req, res, next) => {
             throw new ExpressError('Please provide a FROM user, a TO user and a message body', 400);
         }
 
-        if (from_username !== req.user.user) {
+        if (from_username !== req.user.username) {
             throw new ExpressError(`You can not create a message from a user that isn't you!`, 401);
         }
 
@@ -70,7 +70,7 @@ router.post('/', async (req, res, next) => {
 router.post('/:id/read', async (req, res, next) => {
     try {
         const authCheck = await Message.get(req.params.id)
-        if (authCheck.to_user.username !== req.user.user) {
+        if (authCheck.to_user.username !== req.user.username) {
             throw new ExpressError('You are not authorized to mark this message as read!', 401);
         }
         const message = await Message.markRead(req.params.id)
