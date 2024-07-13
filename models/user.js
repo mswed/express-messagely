@@ -31,7 +31,6 @@ class User {
                     // Username already taken
                     throw new ExpressError('User name taken. Please select a different username', 400)
                 }
-                console.log(e)
             }
         } else {
             throw new ExpressError('Please provide username, password, first name, last name and phone number', 400)
@@ -185,6 +184,7 @@ class User {
             }
         })
     }
+
 }
 
 const user = {
